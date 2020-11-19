@@ -11,7 +11,15 @@ I decided Not to update my repo from 2018 (via webpack). Instead, I started a ne
 - The npm modules can no longer be installed properly with my current version of node (v14, VS previously at v8).
 - Even with node at v8 (before my update), the module csvtojson stopped working due to some conflit. The failing of a key module is a major blocker.
 
-## Database decision: MongoDB
+## Technologies for the Full Stack
+
+### Front end: React
+
+### Server: Express
+
+### Database: MongoDB.
+
+I made the decision to use MongoDB, because this NoSQL DB is quite native to Javascript (.js). On the flip side, MySQL DB (.sql, not .js) has too many security constraints (e.g. command line issue, when importing a CSV file)
 
 ## Development
 
