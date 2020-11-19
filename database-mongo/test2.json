@@ -1,0 +1,22 @@
+[
+  { "city": "New York, NY", "date": "1996-01-31", "price": "187842.0" },
+  { "city": "New York, NY", "date": "1996-02-29", "price": "187403.0" },
+  { "city": "New York, NY", "date": "1996-03-31", "price": "187125.0" },
+  { "city": "New York, NY", "date": "1996-04-30", "price": "186592.0" },
+  { "city": "New York, NY", "date": "1996-05-31", "price": "186274.0" },
+  { "city": "New York, NY", "date": "1996-06-30", "price": "185984.0" },
+  { "city": "New York, NY", "date": "1996-07-31", "price": "185806.0" },
+  { "city": "New York, NY", "date": "1996-08-31", "price": "185714.0" },
+  { "city": "New York, NY", "date": "1996-09-30", "price": "185759.0" },
+  { "city": "New York, NY", "date": "1996-10-31", "price": "185882.0" },
+  { "city": "New York, NY", "date": "1996-11-30", "price": "186007.0" },
+  { "city": "New York, NY", "date": "1996-12-31", "price": "186153.0" },
+  { "city": "New York, NY", "date": "1997-01-31", "price": "186427.0" },
+  { "city": "New York, NY", "date": "1997-02-28", "price": "187036.0" },
+  { "city": "New York, NY", "date": "1997-03-31", "price": "187752.0" },
+  { "city": "New York, NY", "date": "1997-04-30", "price": "188422.0" },
+  { "city": "New York, NY", "date": "1997-05-31", "price": "188919.0" },
+  { "city": "New York, NY", "date": "1997-06-30", "price": "189541.0" },
+  { "city": "New York, NY", "date": "1997-07-31", "price": "190163.0" },
+  { "city": "New York, NY", "date": "1997-08-31", "price": "190784.0" }
+]

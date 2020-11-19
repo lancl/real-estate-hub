@@ -1,22 +1,32 @@
 /**
  * About: process input data from Zillow (more of a CSV file, than an API)
- * Key steps
+ *
+ * Key steps:
  * (1) Convert format from CSV to json
  * (2) Clean up the data: esp. create columns for 'Date' and 'Price'
+ *
+ * The data table(s):
+ * (1) Time-series: fields includ RegionName, Date, Price
  */
 
 const csv = require("csvtojson");
-
 // const filePath = "../zillow-data/test2.csv";
 const filePath = "../zillow-data/zillowRegionData.csv";
 
-// const FIRST_PART_HEADERS = ["ID", "Name"]; // For test file
-const FIRST_PART_HEADERS = ["RegionID", "SizeRank", "RegionName", "StateName"];
+/**
+ * Define the constant variables
+ */
 
-// Note: each city (i.e. RegionName) has almost 300 rows' data (20+ years, on monthly basis)
-const ROWS_TO_PRINT = 400; // For console.log
+const TIME_SERIES_HEADERS = ["RegionName", "date", "price"];
+const HEADERS_MAPPING = {
+  RegionName: "city",
+};
 
-const processData = async (input) => {
+/**
+ * The data-processing function(s)
+ */
+
+const generateTimeSeriesData = async (input) => {
   const output = [];
 
   // Step 1: convert input CSV into json
@@ -29,9 +39,9 @@ const processData = async (input) => {
 
     // Populate the first part (key-value pairs) for the obj
     const firstPartOfObj = {};
-    FIRST_PART_HEADERS.forEach((header) => {
-      firstPartOfObj[header] = row[header];
-    });
+    const firstHeader = TIME_SERIES_HEADERS[0];
+    const firstHeaderMapped = HEADERS_MAPPING[TIME_SERIES_HEADERS[0]];
+    firstPartOfObj[firstHeaderMapped] = row[firstHeader];
 
     // Go through the row of objects (key-value pairs)
     for (const header in row) {
@@ -40,21 +50,35 @@ const processData = async (input) => {
 
       // Add a new row/obj to the output, for each new date
       const obj = { ...firstPartOfObj };
-      obj["Date"] = header;
-      obj["Price"] = row[header];
+
+      obj[TIME_SERIES_HEADERS[1]] = header;
+      obj[TIME_SERIES_HEADERS[2]] = row[header];
       // Add the obj to the output
       output.push(obj);
     }
   }
 
-  console.log(`### output: ${JSON.stringify(output.slice(0, ROWS_TO_PRINT))}`);
+  // console.log(`### output: ${JSON.stringify(output.slice(0, ROWS_TO_PRINT))}`);
   return output;
 };
 
-processData(filePath);
+module.exports = {
+  generateTimeSeriesData,
+  filePath,
+};
 
+/**
+ * Simple test(s)
+ */
+
+// Check if step 1 is working
 // csv()
 //   .fromFile(filePath)
-//   .then((jsonObj) => {
-//     console.log(jsonObj);
+//   .then((json) => {
+//     console.log(json);
 //   });
+
+// Test step 2
+// Note: each city (i.e. RegionName) has almost 300 rows' data (20+ years, on monthly basis)
+// const ROWS_TO_PRINT = 20; // For console.log
+// generateTimeSeriesData(filePath);
