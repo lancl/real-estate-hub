@@ -6,11 +6,13 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",
+    "axios": "^0.21.0",
     "chart.js": "^2.9.4",
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "google-map-react": "^2.1.9",
     "mongoose": "^5.10.15",
+    "path": "^0.12.7",
     "react": "^17.0.1",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",
@@ -21,7 +23,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node ./server/index.js"
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8000"
 }

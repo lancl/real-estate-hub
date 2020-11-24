@@ -1,6 +1,7 @@
 // About: the default data, which is Seattle's
 
 module.exports = {
+  // labels: ["1996-01-31", "1996-02-29"],
   labels: ["1996-01-31", "1996-02-29", "1996-03-31"],
   datasets: [
     {
@@ -23,6 +24,7 @@ module.exports = {
       pointRadius: 1,
       pointHitRadius: 10,
 
+      // data: ["245300", "269900"],
       data: ["245300", "269900", "280300"],
     },
   ],

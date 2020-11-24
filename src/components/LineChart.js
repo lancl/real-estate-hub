@@ -6,7 +6,6 @@
 import React from "react";
 
 import { Line } from "react-chartjs-2"; // This module depends on chart.js (the base module)
-import DUMMY_DATA from "../dummyData2";
 
 // Currency label for vertical axis
 const OPTIONS = {
@@ -25,10 +24,11 @@ const OPTIONS = {
 // CSS: height for the chart
 const HEIGHT = 150;
 
-const LineChart = () => (
+// About: the line-chart component
+const LineChart = ({ data }) => (
   <div className="Line-Chart">
     <p>City #</p>
-    <Line data={DUMMY_DATA} options={OPTIONS} height={HEIGHT} redraw />
+    <Line data={data} options={OPTIONS} height={HEIGHT} redraw />
   </div>
 );
 
