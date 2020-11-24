@@ -2,24 +2,39 @@
 
 About the app: it is a real-estate hub, providing insights such as home-price trend in the United States.
 
-## A Bootstrapped App
+## Front End
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### A Bootstrapped App
 
-I decided Not to update my repo from 2018 (via webpack). Instead, I started a new repo via create-react-app. Because the effort to update the legacy codes is too high, including the following:
+This project was bootstrapped with [create-react-app](https://github.com/facebook/create-react-app).
 
-- The npm modules can no longer be installed properly with my current version of node (v14, VS previously at v8).
-- Even with node at v8 (before my update), the module csvtojson stopped working due to some conflit. The failing of a key module is a major blocker.
+I decided Not to update my repo from 2018 (via webpack). Instead, I started a new repo via create-react-app. This is due to the high efforts to update the legacy codes (e.g. node's v8 VS v14).
 
-## Technologies for the Full Stack
+Note that front end's folder name is 'src' (instead of 'client'). This is due to create-react-app's constraint.
 
-### Front end: React
+## Back End
 
 ### Server: Express
 
-### Database: MongoDB.
+### Database: MongoDB
 
 I made the decision to use MongoDB, because this NoSQL DB is quite native to Javascript (.js). On the flip side, MySQL DB (.sql, not .js) has too many security constraints (e.g. command line issue, when importing a CSV file)
+
+## Data Source
+
+A challenge of building this app is finding free and good-quality API (for data). Zillow is the only free source for real-estate data. Therefore, I decided to use Zillow.
+
+### API VS CSV file:
+
+Originally, I tried to use [Zillow's API](https://www.zillow.com/howto/api/APIOverview.htm). Unfortunately, region-level data is not available (only property-level data is available). Therefore, I switched to downloading a big CSV file from Zillow's site.
+
+### Data Conversion: CSV to JSON
+
+For some reason, [module csvtojson](https://www.npmjs.com/package/csvtojson) did not work with my 2018's repo. On the other hand, it did work when I tested this module on its own (created a folder with only: this module, a simple CSV file, and a simple test JS file). Therefore, I decided to update everyting (incl. create-react-app, node version), for this key module to work.
+
+### Data Processing
+
+The region-level data needs to be processed (e.g. re-shaped/cleaned), before loading it to the database. For details, refer to the file /database-mongo/processData.js.
 
 ## Development
 
