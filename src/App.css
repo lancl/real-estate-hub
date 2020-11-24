@@ -38,11 +38,11 @@
   /* display: grid; */
   display: table;
   width: 100%;
-  background-color: lightblue;
+  /* background-color: lightblue; */
 }
 
 .Line-Chart {
   width: 95%;
   margin-left: 2.5%;
-  background-color: lightyellow;
+  /* background-color: lightyellow; */
 }

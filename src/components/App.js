@@ -1,5 +1,6 @@
 /**
  * About: main component for this app
+ * [TBD] Add a filter for year (via DB's 'date' field)
  */
 
 import "../App.css";
@@ -11,8 +12,13 @@ import Search from "./Search";
 import Map from "./Map";
 import LineChart from "./LineChart";
 
-import DUMMY_DATA from "../dummyData2";
-import { PARAMS } from "../CHART_PARAMS";
+// Constant variable(s) for the search bar
+// [Todo] Replace the dummy data below, by adding all of the US cities
+const CITIES = ["San Jose, CA", "New York, NY"];
+
+// Constant variables for the line chart
+import DUMMY_DATA from "../dummyData2"; // eslint-disable-line
+import { PARAMS, secondColor } from "../CHART_PARAMS"; // eslint-disable-line
 
 // [Todo] Define the rest of the states (for Map component)
 class App extends React.Component {
@@ -21,6 +27,7 @@ class App extends React.Component {
     this.state = {
       // [Todo] Change the state 'query' to an array
       query: "", // Search query
+      suggestions: CITIES, // For search bar's auto suggest
       cityPriceData: DUMMY_DATA, // For 1 or more cities
     };
   }
@@ -29,10 +36,51 @@ class App extends React.Component {
    * Below are the methods
    */
 
+  // About: helper for auto-suggest
+  escapeRegexCharacters = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // About: helper for auto-suggest
+  getSuggestions = (value) => {
+    const escapedValue = this.escapeRegexCharacters(value.trim());
+
+    if (escapedValue === "") return [];
+
+    const regex = new RegExp("^" + escapedValue, "i");
+
+    return CITIES.filter((city) => regex.test(city));
+  };
+
+  // About: method for auto-suggest
+  getSuggestionValue = (suggestion) => suggestion;
+
+  // About: method for auto-suggest
+  renderSuggestion = (suggestion) => <span>{suggestion}</span>;
+
   // About: handle text change in search box
-  handleChange = (e) => {
+  // Note: adjusted per auto suggestion
+  handleChange = (_, { newValue }) => {
     this.setState({
-      query: e.target.value,
+      query: newValue,
+    });
+  };
+  // handleChange = (e) => {
+  //   this.setState({
+  //     query: e.target.value,
+  //   });
+  // };
+
+  // About: method for auto-suggest
+  onSuggestionsFetchRequested = ({ value }) => {
+    console.log(`### [onSuggestionsFetchRequested] value is ${value}`);
+    this.setState({
+      suggestions: this.getSuggestions(value),
+    });
+  };
+
+  // About: method for auto-suggest
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
     });
   };
 
@@ -47,7 +95,6 @@ class App extends React.Component {
   };
 
   // About: search to get price data, by input city
-  // [Todo] Figure out a good way to set 'chartNum', by the second search bar
   getPriceByCity = (city) => {
     axios
       .get(`/city/${city}`)
@@ -79,7 +126,13 @@ class App extends React.Component {
       <div>
         <header className="App-header">Real Estate Hub</header>
         <Search
+          query={this.state.query}
+          suggestions={this.state.suggestions}
+          getSuggestionValue={this.getSuggestionValue}
+          renderSuggestion={this.renderSuggestion}
           handleChange={this.handleChange}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           handleClick={this.handleClick}
         />
         <div>
