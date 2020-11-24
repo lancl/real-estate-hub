@@ -29,8 +29,8 @@
 
 .Map {
   height: 30vh;
-  width: 47.5%;
-  margin: 10px;
+  width: 95%;
+  margin: 2.5%;
 }
 
 /* The charts are side-by-side: each column takes the same amount of space */
@@ -38,12 +38,11 @@
   /* display: grid; */
   display: table;
   width: 100%;
-  /* background-color: lightblue; */
+  background-color: lightblue;
 }
 
 .Line-Chart {
-  float: left;
-  width: 47.5%;
-  margin: 10px;
-  /* background-color: lightblue; */
+  width: 95%;
+  margin-left: 2.5%;
+  background-color: lightyellow;
 }

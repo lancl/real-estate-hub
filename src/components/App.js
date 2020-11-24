@@ -12,15 +12,16 @@ import Map from "./Map";
 import LineChart from "./LineChart";
 
 import DUMMY_DATA from "../dummyData2";
+import { PARAMS } from "../CHART_PARAMS";
 
 // [Todo] Define the rest of the states (for Map component)
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // [Todo] Change the state 'query' to an array
       query: "", // Search query
-      priceOfCity1: DUMMY_DATA,
-      priceOfCity2: DUMMY_DATA,
+      cityPriceData: DUMMY_DATA, // For 1 or more cities
     };
   }
 
@@ -47,21 +48,26 @@ class App extends React.Component {
 
   // About: search to get price data, by input city
   // [Todo] Figure out a good way to set 'chartNum', by the second search bar
-  getPriceByCity = (city, chartNum = 1) => {
+  getPriceByCity = (city) => {
     axios
       .get(`/city/${city}`)
       .then((response) => {
         console.log(`### [Response Data] ${JSON.stringify(response)}`);
+        const { labels, datasets } = response.data;
 
-        if (chartNum === 2) {
-          this.setState({
-            priceOfCity2: response.data,
-          });
-        } else {
-          this.setState({
-            priceOfCity1: response.data, // By default
-          });
-        }
+        // Update corresponding state, with PARAMS added
+        this.setState({
+          cityPriceData: {
+            labels: labels,
+            datasets: [
+              {
+                label: datasets[0].label,
+                data: datasets[0].data,
+                ...PARAMS,
+              },
+            ],
+          },
+        });
       })
       .catch((err) => {
         console.error(`### Error: ${err}`);
@@ -80,8 +86,7 @@ class App extends React.Component {
           <Map />
         </div>
         <div className="Charts">
-          <LineChart data={this.state.priceOfCity1} />
-          <LineChart data={this.state.priceOfCity2} />
+          <LineChart data={this.state.cityPriceData} />
         </div>
       </div>
     );
