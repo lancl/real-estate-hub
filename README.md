@@ -2,7 +2,7 @@
 
 About the app: it is a real-estate hub, providing insights such as home-price trend in the United States.
 
-## Front End
+## 1. Front End
 
 ### A Bootstrapped App
 
@@ -12,17 +12,17 @@ I decided Not to update my repo from 2018 (via webpack). Instead, I started a ne
 
 Note that front end's folder name is 'src' (instead of 'client'). This is due to create-react-app's constraint.
 
-## Back End
+## 2. Back End
 
-### Server: Express
+### 2(a). Server: Express
 
-### Database: MongoDB
+### 2(b). Database: MongoDB
 
 I made the decision to use MongoDB, because this NoSQL DB is quite native to Javascript (.js). On the flip side, MySQL DB (.sql, not .js) has too many security constraints (e.g. command line issue, when importing a CSV file)
 
-## Data Source
+## 3. Data Source
 
-A challenge of building this app is finding free and good-quality API (for data). Zillow is the only free source for real-estate data. Therefore, I decided to use Zillow.
+A challenge for building this app is finding free and good-quality API (for data). Zillow is the only free source for real-estate data. Therefore, I decided to use Zillow.
 
 ### API VS CSV file:
 
@@ -36,7 +36,7 @@ For some reason, [module csvtojson](https://www.npmjs.com/package/csvtojson) did
 
 The region-level data needs to be processed (e.g. re-shaped/cleaned), before loading it to the database. For details, refer to the file /database-mongo/processData.js.
 
-## Development
+## 4. Development
 
 - Install dependencies: `npm start`
 - Run the app: `npm start`; then open [http://localhost:3000](http://localhost:3000) to view it in the browser. Also, any lint errors will be shown in the console.

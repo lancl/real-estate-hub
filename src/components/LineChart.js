@@ -26,7 +26,7 @@ const OPTIONS = {
 const HEIGHT = 150;
 
 const LineChart = () => (
-  <div>
+  <div className="Line-Chart">
     <p>City #</p>
     <Line data={DUMMY_DATA} options={OPTIONS} height={HEIGHT} redraw />
   </div>

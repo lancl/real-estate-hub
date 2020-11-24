@@ -1,39 +1,49 @@
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #50c878;
   min-height: 30px;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
   padding: 5px;
   text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.Search-Container {
+  height: 50px;
+  padding: 10px 10px;
+  /* background-color: lightblue; */
 }
 
-.Search {
-  height: 40px;
+.Search-Container input {
   width: 40%;
-  margin: 10px;
   font-size: 20px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.Search-Container button {
+  width: 80px;
+  font-size: 15px;
+  padding: 5px;
+  margin: 5px;
 }
 
 .Map {
   height: 30vh;
-  width: 80%;
-  margin: 5px;
+  width: 47.5%;
+  margin: 10px;
 }
 
+/* The charts are side-by-side: each column takes the same amount of space */
 .Charts {
-  display: grid;
-  /* Side by side: each column takes the same amount of space */
-  grid-template-columns: 50% 50%;
-  grid-gap: 20px;
+  /* display: grid; */
+  display: table;
+  width: 100%;
+  /* background-color: lightblue; */
+}
+
+.Line-Chart {
+  float: left;
+  width: 47.5%;
+  margin: 10px;
+  /* background-color: lightblue; */
 }

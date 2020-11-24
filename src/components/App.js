@@ -15,7 +15,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //
+      query: "", // Search query
     };
   }
 
@@ -23,17 +23,39 @@ class App extends React.Component {
    * Below are the methods
    */
 
+  // About: handle text change in search box
+  handleChange = (e) => {
+    this.setState({
+      query: e.target.value,
+    });
+  };
+
+  // About:; handle click on search button
+  handleClick = () => {
+    const city = this.state.city;
+    this.searchByCity(city);
+  };
+
+  // About: search real-estate data, by input city
+  // [Todo] Finish this method
+  searchByCity = (city) => {
+    alert("### Searching by city!");
+  };
+
   render() {
     return (
       <div>
         <header className="App-header">Real Estate Hub</header>
-        <Search />
+        <Search
+          handleChange={this.handleChange}
+          handleClick={this.handleClick}
+        />
         <div>
           <Map />
         </div>
         <div className="Charts">
           <LineChart />
-          <LineChart />
+          {/* <LineChart /> */}
         </div>
       </div>
     );
