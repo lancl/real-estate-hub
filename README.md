@@ -4,13 +4,27 @@ About the app: it is a real-estate hub, providing insights such as home-price tr
 
 ## 1. Front End
 
-### A Bootstrapped App
+Note that front end's folder name is 'src' (instead of 'client'). This is due to create-react-app's constraint.
+
+### Bootstrapped with create-react-app
 
 This project was bootstrapped with [create-react-app](https://github.com/facebook/create-react-app).
 
 I decided Not to update my repo from 2018 (via webpack). Instead, I started a new repo via create-react-app. This is due to the high efforts to update the legacy codes (e.g. node's v8 VS v14).
 
-Note that front end's folder name is 'src' (instead of 'client'). This is due to create-react-app's constraint.
+### Auto-Suggestion for Search Bar
+
+Based on this npm package, [react-autosuggest](https://www.npmjs.com/package/react-autosuggest). The advantages of providing auto-suggestion feature include less effort to type the full name of each city.
+
+### Google Maps
+
+Note that this API service is no longer free (it was back in 2018).
+
+### Line Charts
+
+Based on these 2 npm packages, chart.js and react-chartjs-2. The advantages of using these packages include beautiful data visualization for large set of data points (i.e. monthly price data, for 20+ years).
+
+Note that [Google Charts](https://www.w3schools.com/howto/howto_google_charts.asp) is an alternative way to plot charts.
 
 ## 2. Back End
 

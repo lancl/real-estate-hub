@@ -24,13 +24,13 @@ app.get("/city/:name/", async (req, res) => {
   try {
     // Step 1: get data from DB
     let data = await db.getPriceByCity(city);
-    // data = data.slice(0, 6);
 
     // Step 2: adjust data, per front end's format
     const adjustedData = adjustData(data, city);
     // console.log(`### [Adjusted Data] ${JSON.stringify(adjustedData)}`);
 
     // Step 3: send the data to client side
+    console.log(`###### Sending data back to the client side`);
     res.send(adjustedData);
   } catch (e) {
     console.error(e);

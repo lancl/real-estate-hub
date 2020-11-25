@@ -1,6 +1,6 @@
 // About: the default data, which is Seattle's
 
-const { PARAMS, secondColor } = require("./CHART_PARAMS");
+const { PARAMS, secondColor } = require("./chartParams");
 
 module.exports = {
   labels: ["1996-01-31", "1996-02-29", "1996-03-31"],

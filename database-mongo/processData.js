@@ -62,6 +62,26 @@ const generateTimeSeriesData = async (input) => {
   return output;
 };
 
+// About: generate a list of cities (for UI's auto-suggestion)
+// Note: export the data to cityList.js (instead of saving it to DB), because the data
+// is relatively small
+const generateCityList = async (input) => {
+  const output = [];
+
+  const jsonArray = await csv().fromFile(filePath);
+
+  for (let i = 0; i < jsonArray.length; i++) {
+    const row = jsonArray[i];
+    output.push(row.RegionName);
+  }
+
+  console.log(JSON.stringify(output));
+
+  return output;
+};
+
+// generateCityList(filePath); // Note: only need to run this line one-time
+
 module.exports = {
   generateTimeSeriesData,
   filePath,

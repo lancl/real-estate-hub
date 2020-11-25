@@ -1,7 +1,6 @@
 /**
  * Key notes:
- * (1) Google Maps' API is no longer free (previously was in 2018); so use the key,
- * MAP_KEY_FAKE, to avoid bill/charge (when the actual data is not needed)
+ * (1) Google Maps' API is not free; so use the key, MAP_KEY_FAKE, to avoid unwanted charge
  * (2) CSS for this component: the height needs to be set explicitly, as in 'className=
  * "Map"'
  */
@@ -23,9 +22,18 @@ const Map = () => (
   <div className="Map">
     <GoogleMapReact
       bootstrapURLKeys={{ key: MAP_KEY_FAKE }}
-      defaultZoom={ZOOM}
-      defaultCenter={CENTER}
-    />
+      // defaultZoom={ZOOM}
+      // defaultCenter={CENTER}
+      zoom={ZOOM}
+      center={CENTER}
+    >
+      <div lat={59.955413} lng={30.337844}>
+        A
+      </div>
+      <div lat={59.724465} lng={30.080121}>
+        B
+      </div>
+    </GoogleMapReact>
   </div>
 );
 
