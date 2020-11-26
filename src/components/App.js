@@ -49,8 +49,6 @@ class App extends React.Component {
       suggestions: [], // For search bar's auto suggest
       cityPriceData: {}, // For 1 or more cities
       markers: [], // For Map component; up to 2
-      selectedMarker: {}, // The marker that is clicked on
-      showMarkers: false,
     };
   }
 
@@ -111,52 +109,36 @@ class App extends React.Component {
     this.getPriceByCity(city1, city2);
   };
 
-  // About: clear all marker(s) on the map
-  handleClickToClear = () => {
-    if (this.state.showMarkers === true) {
-      // alert(`### Clear current marker(s)`);
-      this.setState({
-        showMarkers: false,
-        markers: [],
-      });
-    }
-  };
-
   // About: update Map component per city names
-  // [TBD] Finish the logic for error catching for this method
   updateMap = async (city1, city2) => {
     const marker1 = { city: city1 };
     const marker2 = { city: city2 };
 
-    // Get the lat and lng
-    // For city1
-    const response1 = await axios.get(
-      `${GEOCODE_URL}&address=${adjustAddress(city1)}`
-    );
-    updateMarker(marker1, response1, "city 1");
-
-    // For city2 (optional)
-    if (city2.length > 0) {
-      const response2 = await axios.get(
-        `${GEOCODE_URL}&address=${adjustAddress(city2)}`
+    try {
+      // Get the lat and lng
+      // For city1
+      const response1 = await axios.get(
+        `${GEOCODE_URL}&address=${adjustAddress(city1)}`
       );
-      updateMarker(marker2, response2, "city 2");
+      updateMarker(marker1, response1, "city 1");
+
+      // For city2 (optional)
+      if (city2.length > 0) {
+        const response2 = await axios.get(
+          `${GEOCODE_URL}&address=${adjustAddress(city2)}`
+        );
+        updateMarker(marker2, response2, "city 2");
+      }
+
+      // Update the corresponding state
+      this.setState({
+        markers:
+          Object.keys(marker2).length > 1 ? [marker1, marker2] : [marker1],
+        // showMarkers: true,
+      });
+    } catch (err) {
+      console.error(`### Error: ${err}`);
     }
-
-    // Update the corresponding state
-    this.setState({
-      markers: Object.keys(marker2) > 1 ? [marker1, marker2] : [marker1],
-      showMarkers: true,
-    });
-  };
-
-  // About: handle click on a marker on the map
-  handleMarkerClick = (event, marker) => {
-    // event.preventDefault();
-
-    this.setState({
-      selectedMarker: marker,
-    });
   };
 
   // About: search to get price data, by input city
@@ -224,15 +206,9 @@ class App extends React.Component {
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           handleClick={this.handleClick}
-          handleClickToClear={this.handleClickToClear}
         />
         <div className="Map">
-          <Map
-            markers={this.state.markers}
-            selectedMarker={this.state.selectedMarker}
-            onClick={this.handleMarkerClick}
-            showMarkers={this.state.showMarkers}
-          />
+          <Map markers={this.state.markers} />
         </div>
         <div className="Charts">
           <LineChart data={this.state.cityPriceData} />

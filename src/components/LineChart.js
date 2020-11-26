@@ -44,7 +44,7 @@ const OPTIONS = {
 };
 
 // CSS: height for the chart
-const HEIGHT = "65vh";
+const HEIGHT = "75vh";
 
 // About: the line-chart component
 const LineChart = ({ data }) => (

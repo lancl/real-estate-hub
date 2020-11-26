@@ -18,10 +18,10 @@
 }
 
 .react-autosuggest__container {
-  width: 20%;
+  width: 15%;
   min-width: 100px;
   background-color: white;
-  font-size: 15px;
+  font-size: 12.5px;
   /* background-color: lightyellow; */
 }
 
@@ -29,7 +29,7 @@
   width: 85%;
   padding: 5px;
   margin: 5px;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 .react-autosuggest__suggestions-list {
@@ -69,4 +69,31 @@
   width: 95%;
   margin-left: 2.5%;
   /* background-color: lightyellow; */
+}
+
+.Tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+  width: 110px;
+  background-color: lightgreen;
+  text-align: center;
+  padding: 5px;
+}
+
+.Tooltip-Text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #50c878;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+
+  /* Position the Tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.Tooltip:hover .Tooltip-Text {
+  visibility: visible;
 }

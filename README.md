@@ -20,6 +20,11 @@ Based on this npm package, [react-autosuggest](https://www.npmjs.com/package/rea
 
 Note that this API service is no longer free (it was back in 2018).
 
+I found one of Google Maps' API (`https://maps.googleapis.com/maps/api/js`) difficult to use (e.g. takes lots of configurations). Below are some issues that I ran into. The details are in Map.js file. But on the bright side, these issues are relatively minor.
+
+- Markers cannot be re-rendered without refreshing the page (AKA `GoogleMap` from `react-google-maps` module simply does not remove any marker, once added). First, I converted this component from a function to a class (with `componentDidUpdate()`), but it did not work. Then, I looked into [its API doc](https://developers.google.com/maps/documentation/javascript/examples/marker-remove), but found its logic to be not helpful for React (more for Vanilla JS).
+- Cannot dynamically set `defaultZoom` for `<GoogleMap>`. I wrote a helper function, getDefaultZoom(), that zooms in if the 2 geo-markers are close by. But it did not work (the map component simply does not update, once mounted). Therefore, I just set the default zoom as showing entire country of the US.
+
 ### Line Charts
 
 Based on these 2 npm packages, chart.js and react-chartjs-2. The advantages of using these packages include beautiful data visualization for large set of data points (i.e. monthly price data, for 20+ years).
@@ -29,6 +34,10 @@ Note that [Google Charts](https://www.w3schools.com/howto/howto_google_charts.as
 ## 2. Back End
 
 ### 2(a). Server: Express
+
+A proxy (in package.json) is set up, to connect Express's back end with create-react-app's front end. `"proxy": "http://localhost:8000"`
+
+Also, some adjustments were made in server/index.js. `app.use(express.static(path.join(__dirname, "../build"))); `
 
 ### 2(b). Database: MongoDB
 
@@ -54,3 +63,14 @@ The region-level data needs to be processed (e.g. re-shaped/cleaned), before loa
 
 - Install dependencies: `npm start`
 - Run the app: `npm start`; then open [http://localhost:3000](http://localhost:3000) to view it in the browser. Also, any lint errors will be shown in the console.
+
+### 5. Screenshots
+
+#### Auto-Suggestion
+
+![](./screenshot1.png)
+
+#### For Analysis (Cross-Region)
+
+![](./screenshot2.png)
+![](./screenshot3.png)

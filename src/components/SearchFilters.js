@@ -14,7 +14,6 @@ const SearchFilters = ({
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
   handleClick,
-  handleClickToClear,
 }) => {
   return (
     <div className="Search-Container">
@@ -47,15 +46,15 @@ const SearchFilters = ({
       <button className="Search-Button" type="submit" onClick={handleClick}>
         Submit
       </button>
-      <button
-        className="Search-Button"
-        type="submit"
-        onClick={handleClickToClear}
-      >
-        Clear Markers
-      </button>
+
+      <div className="Tooltip">
+        Tip on Search (hover over)
+        <span className="Tooltip-Text">
+          Enter the first letter of the city, then a auto-suggestion list will
+          be populated. Select a suggested city, then submit the search.
+        </span>
+      </div>
     </div>
-    // </form>
   );
 };
 

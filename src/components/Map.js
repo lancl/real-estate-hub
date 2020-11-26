@@ -77,7 +77,6 @@ const getDefaultCenter = (markers) => {
  */
 
 // About: parent component
-// Note: use a class for <Map/>, in order to clear markers when needed
 class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -86,27 +85,23 @@ class Map extends React.Component {
     };
   }
 
-  //
+  // After App.js changes 'markers'
   componentDidUpdate(prevProps) {
     const { markers } = this.props;
+
     if (markers !== prevProps.markers) {
-      alert(`[Map] componentDidUpdate, for prop markers!`);
-      if (this.props.showMarkers) {
-        this.setState({
-          markerElements: this.generateMarkerElements(markers),
-        });
-      } else {
-        this.setState({
-          markerElements: [],
-        });
-      }
+      // alert(`[Map] componentDidUpdate, for prop markers!`);
+      this.setState({
+        markerElements: this.generateMarkerElements(markers),
+      });
     }
   }
 
   // About: generate HTML elements, for input markers
   generateMarkerElements = (markers) => {
     const output = [];
-    markers.map((marker) => {
+    // console.log(`### [generateMarker] markers' length is ${markers.length}`);
+    markers.map((marker, index) => {
       output.push(<Marker position={{ lat: marker.lat, lng: marker.lng }} />);
     });
     return output;
@@ -119,8 +114,6 @@ class Map extends React.Component {
         loadingElement={LOADING_ELEMENT}
         mapElement={MAP_ELEMENT}
         containerElement={CONTAINER_ELEMENT}
-        // selectedMarker={selectedMarker}
-        // onClick={onClick}
         markers={this.props.markers}
         markerElements={this.state.markerElements}
       ></MapWithMarker>
@@ -128,6 +121,7 @@ class Map extends React.Component {
   }
 }
 
+// About: child component
 const MapWithMarker = compose(
   withScriptjs,
   withGoogleMap
@@ -143,12 +137,12 @@ const MapWithMarker = compose(
 });
 
 /**
- * Deprecated scripts
+ * Deprecated scripts (from a ref link)
  */
 // const MapWithMarker = compose(
 //   withScriptjs,
 //   withGoogleMap
-// )(({ markers, selectedMarker, onClick, showMarkers }) => {
+// )(({ markers, selectedMarker, onClick }) => {
 //   return (
 //     <GoogleMap
 //       defaultZoom={getDefaultZoom(markers)}
