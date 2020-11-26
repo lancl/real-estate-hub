@@ -14,6 +14,7 @@ const SearchFilters = ({
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
   handleClick,
+  handleClickToClear,
 }) => {
   return (
     <div className="Search-Container">
@@ -45,6 +46,13 @@ const SearchFilters = ({
 
       <button className="Search-Button" type="submit" onClick={handleClick}>
         Submit
+      </button>
+      <button
+        className="Search-Button"
+        type="submit"
+        onClick={handleClickToClear}
+      >
+        Clear Markers
       </button>
     </div>
     // </form>

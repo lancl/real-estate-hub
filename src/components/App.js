@@ -1,6 +1,5 @@
 /**
  * About: main component for this app
- * [TBD] Add lifescycle method(s)
  */
 
 import "../App.css";
@@ -12,123 +11,54 @@ import SearchFilters from "./SearchFilters";
 import Map from "./Map";
 import LineChart from "./LineChart";
 
+// Helper functions
+import {
+  getSuggestions,
+  getStateWithMergedData,
+  adjustAddress,
+  updateMarker,
+} from "../helpers";
+
 /**
  * Constant variables
  */
 
-// Constant variable(s) for the search bar
+// For the search bar
 import { CITIES } from "../cityList";
 
-// Constant variables for the line chart
+// For the map
+// Note: this other Google service is also no longer free
+import { MAP_KEY } from "../config";
+
+const GEOCODE_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${MAP_KEY}`;
+
+// For the line chart
 import DUMMY_DATA from "../dummyData2"; // eslint-disable-line
-import { PARAMS, secondColor } from "../chartParams"; // eslint-disable-line
-
-/**
- * Helper functions: the first 2 are for auto-suggestion
- * Ref link: https://www.npmjs.com/package/react-autosuggest
- * @function escapeRegexCharacters: regex processing
- * @function getSuggestions: to get a list of suggestion(s)
- *
- * @function getStateWithMergedData: helper for @function getPriceByCity
- */
-
-const escapeRegexCharacters = (str) =>
-  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-const getSuggestions = (value) => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  //
-  if (escapedValue === "") return [];
-  //
-  const regex = new RegExp("^" + escapedValue, "i");
-  return CITIES.filter((city) => regex.test(city));
-};
-
-// Approach as 2 pointers (p1 and p2); output as a new state
-const getStateWithMergedData = (l1, labels1, data1, l2, labels2, data2) => {
-  const newState = {
-    labels: [],
-    datasets: [
-      {
-        label: l1,
-        data: [],
-        ...PARAMS,
-      },
-      {
-        label: l2,
-        data: [],
-        ...PARAMS,
-        // Adjust the color
-        backgroundColor: secondColor,
-        borderColor: secondColor,
-        pointBorderColor: secondColor,
-      },
-    ],
-  };
-
-  // Step 1: go through input arrays (labels and data), to update the newState
-  const labels = newState.labels;
-  const data1merged = newState.datasets[0].data;
-  const data2merged = newState.datasets[1].data;
-  let p1 = 0,
-    p2 = 0;
-  let len1 = labels1.length,
-    len2 = labels2.length;
-
-  while (p1 < len1 && p2 < len2) {
-    if (labels1[p1] < labels2[p2]) {
-      labels.push(labels1[p1]);
-      data1merged.push(data1[p1]);
-      p1++;
-      data2merged.push("");
-    } else if (labels1[p1] > labels2[p2]) {
-      labels.push(labels2[p2]);
-      data2merged.push(data2[p2]);
-      p2++;
-      data1merged.push("");
-    } else {
-      labels.push(labels1[p1]);
-      data1merged.push(data1[p1]);
-      data2merged.push(data2[p2]);
-      p1++;
-      p2++;
-    }
-  }
-
-  // Step 2: check for any remaining number
-  if (p1 < len1) {
-    while (p1 < len1) {
-      labels.push(labels1[p1]);
-      data1merged.push(data1[p1]);
-      p1++;
-      data2merged.push("");
-    }
-  } else {
-    while (p2 < len2) {
-      labels.push(labels2[p2]);
-      data2merged.push(data2[p2]);
-      p2++;
-      data1merged.push("");
-    }
-  }
-
-  return newState;
-};
+import { PARAMS } from "../chartParams"; // eslint-disable-line
 
 /**
  * App Component (as a class)
  */
 
-// [Todo] Define the rest of the states (for Map component)
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       city1: "",
       city2: "",
-      suggestions: CITIES, // For search bar's auto suggest
-      cityPriceData: DUMMY_DATA, // For 1 or more cities
+      suggestions: [], // For search bar's auto suggest
+      cityPriceData: {}, // For 1 or more cities
+      markers: [], // For Map component; up to 2
+      selectedMarker: {}, // The marker that is clicked on
+      showMarkers: false,
     };
+  }
+
+  // Note: load the data only after component did mount
+  componentDidMount() {
+    this.setState({
+      suggestions: CITIES,
+    });
   }
 
   /**
@@ -177,10 +107,60 @@ class App extends React.Component {
       return;
     }
 
+    this.updateMap(city1, city2);
     this.getPriceByCity(city1, city2);
   };
 
+  // About: clear all marker(s) on the map
+  handleClickToClear = () => {
+    if (this.state.showMarkers === true) {
+      // alert(`### Clear current marker(s)`);
+      this.setState({
+        showMarkers: false,
+        markers: [],
+      });
+    }
+  };
+
+  // About: update Map component per city names
+  // [TBD] Finish the logic for error catching for this method
+  updateMap = async (city1, city2) => {
+    const marker1 = { city: city1 };
+    const marker2 = { city: city2 };
+
+    // Get the lat and lng
+    // For city1
+    const response1 = await axios.get(
+      `${GEOCODE_URL}&address=${adjustAddress(city1)}`
+    );
+    updateMarker(marker1, response1, "city 1");
+
+    // For city2 (optional)
+    if (city2.length > 0) {
+      const response2 = await axios.get(
+        `${GEOCODE_URL}&address=${adjustAddress(city2)}`
+      );
+      updateMarker(marker2, response2, "city 2");
+    }
+
+    // Update the corresponding state
+    this.setState({
+      markers: Object.keys(marker2) > 1 ? [marker1, marker2] : [marker1],
+      showMarkers: true,
+    });
+  };
+
+  // About: handle click on a marker on the map
+  handleMarkerClick = (event, marker) => {
+    // event.preventDefault();
+
+    this.setState({
+      selectedMarker: marker,
+    });
+  };
+
   // About: search to get price data, by input city
+  // [TBD] Extract the overlapping parts between the 2 cities, to a helper
   getPriceByCity = async (city1, city2) => {
     try {
       // For city 1
@@ -244,9 +224,15 @@ class App extends React.Component {
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           handleClick={this.handleClick}
+          handleClickToClear={this.handleClickToClear}
         />
-        <div>
-          <Map />
+        <div className="Map">
+          <Map
+            markers={this.state.markers}
+            selectedMarker={this.state.selectedMarker}
+            onClick={this.handleMarkerClick}
+            showMarkers={this.state.showMarkers}
+          />
         </div>
         <div className="Charts">
           <LineChart data={this.state.cityPriceData} />
