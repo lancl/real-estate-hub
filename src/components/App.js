@@ -1,5 +1,7 @@
 /**
  * About: main component for this app
+ * [TBD] To improve codes' modularity: move Google Maps' API call to service
+ * folder, and add another GET request to the server side
  */
 
 import "../App.css";
