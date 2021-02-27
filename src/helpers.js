@@ -1,56 +1,22 @@
 /**
- * Helper functions: for App.js
- *
- * The first 2 are for auto-suggestion
+ * About: helper functions: for client side
+ */
+
+/**
+ * For App.js - auto-suggestion:
  * Ref link: https://www.npmjs.com/package/react-autosuggest
  * @function escapeRegexCharacters: regex processing
  * @function getSuggestions: to get a list of suggestion(s)
  *
- * The 2 functions below are for @method updateMap
- * @function adjustAddress: replaces any space with '+', to meet axios's format
+ * For App.js - others:
  * @function updateMarker: update a marker with 'lat' and 'lng'
- *
  * @function getStateWithMergedData: helper for @method getPriceByCity
  * Note: this function has less impact here, because the raw data from Zillow is structured
  * in SQL format; whereas it is more helpful for raw data in NoSQL (e.g. 2 cities have different
  * # of rows of data)
  */
 
-const { PARAMS, secondColor } = require("./chartParams"); // eslint-disable-line
-const { CITIES } = require("./cityList");
-
-const escapeRegexCharacters = (str) =>
-  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-const getSuggestions = (value) => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  //
-  if (escapedValue === "") return [];
-  //
-  const regex = new RegExp("^" + escapedValue, "i");
-  return CITIES.filter((city) => regex.test(city));
-};
-
-const adjustAddress = (city) => {
-  let output = "";
-  for (let i = 0; i < city.length; i++) {
-    const char = city[i];
-    if (char === " ") {
-      output = output + "+";
-    } else {
-      output = output + char;
-    }
-  }
-  return output;
-};
-
-const updateMarker = (marker, response, city) => {
-  const { status, data } = response;
-  console.log(`### [updateMap] status is ${status}`);
-  if (status !== 200) {
-    console.error(`[updateMap] Error with ${city}, status as ${status}`);
-    return;
-  }
+const updateMarker = (marker, data, city) => {
   const { lat, lng } = data.results[0].geometry.location;
   marker.lat = lat;
   marker.lng = lng;
@@ -128,9 +94,70 @@ const getStateWithMergedData = (l1, labels1, data1, l2, labels2, data2) => {
   return newState;
 };
 
-module.exports = {
+/**
+ * For Map.js:
+ * @function getDefaultZoom
+ * @function getDefaultCenter
+ */
+
+const ZOOMS = {
+  default: 3.5,
+  big: 8,
+};
+const MARKERS = [
+  { lat: 39.83, lng: -98.58, city: "Center of US" },
+  { lat: 45.51, lng: -122.68, city: "Portland, OR" }, // Portland
+];
+
+// About: dynamicaly set up zoom parameter
+const getDefaultZoom = (markers) => {
+  // Exception(s) checkk
+  if (!markers.length) return ZOOMS.default;
+
+  if (markers.length === 1) {
+    return ZOOMS.big;
+  }
+
+  const [marker1, marker2] = markers;
+  // If the 2 markers are closer by, set bigger zoom
+  if (
+    marker1.lat &&
+    marker2.lat &&
+    Math.abs(marker1.lat - marker2.lat) < 30 &&
+    Math.abs(marker1.lng - marker2.lng) < 30
+  ) {
+    return ZOOMS.big;
+  }
+
+  // Else: set smaller zoom
+  return ZOOMS.default;
+};
+
+const getDefaultCenter = (markers) => {
+  if (!markers.length) return MARKERS[0];
+  return markers[0];
+};
+
+const { PARAMS, secondColor } = require("./chartParams"); // eslint-disable-line
+const { CITIES } = require("./cityList");
+
+const escapeRegexCharacters = (str) =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const getSuggestions = (value) => {
+  const escapedValue = escapeRegexCharacters(value.trim());
+  //
+  if (escapedValue === "") return [];
+  //
+  const regex = new RegExp("^" + escapedValue, "i");
+  return CITIES.filter((city) => regex.test(city));
+};
+
+export {
   getSuggestions,
-  adjustAddress,
   updateMarker,
   getStateWithMergedData,
+  //
+  getDefaultZoom,
+  getDefaultCenter,
 };

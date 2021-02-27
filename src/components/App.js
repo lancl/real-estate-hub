@@ -1,7 +1,5 @@
 /**
  * About: main component for this app
- * [TBD] To improve codes' modularity: move Google Maps' API call to service
- * folder, and add another GET request to the server side
  */
 
 import "../App.css";
@@ -17,7 +15,6 @@ import LineChart from "./LineChart";
 import {
   getSuggestions,
   getStateWithMergedData,
-  adjustAddress,
   updateMarker,
 } from "../helpers";
 
@@ -27,12 +24,6 @@ import {
 
 // For the search bar
 import { CITIES } from "../cityList";
-
-// For the map
-// Note: this other Google service is also no longer free
-import { MAP_KEY } from "../config";
-
-const GEOCODE_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${MAP_KEY}`;
 
 // For the line chart
 import DUMMY_DATA from "../dummyData2"; // eslint-disable-line
@@ -119,17 +110,13 @@ class App extends React.Component {
     try {
       // Get the lat and lng
       // For city1
-      const response1 = await axios.get(
-        `${GEOCODE_URL}&address=${adjustAddress(city1)}`
-      );
-      updateMarker(marker1, response1, "city 1");
+      const response1 = await axios.get(`/marker/${city1}`);
+      updateMarker(marker1, response1.data, "city 1");
 
       // For city2 (optional)
       if (city2.length > 0) {
-        const response2 = await axios.get(
-          `${GEOCODE_URL}&address=${adjustAddress(city2)}`
-        );
-        updateMarker(marker2, response2, "city 2");
+        const response2 = await axios.get(`/marker/${city2}`);
+        updateMarker(marker2, response2.data, "city 2");
       }
 
       // Update the corresponding state
@@ -152,7 +139,7 @@ class App extends React.Component {
       const { data } = await axios.get(`/city/${city1}`);
       const labels1 = data.labels;
       const datasets1 = data.datasets;
-      console.log(`### [getPrice] labels1's length: ${labels1.length}`);
+      // console.log(`### [getPrice] labels1's length: ${labels1.length}`);
 
       // For city 1 only
       if (city2.length === 0) {
@@ -174,7 +161,7 @@ class App extends React.Component {
         const response = await axios.get(`/city/${city2}`);
         const labels2 = response.data.labels;
         const datasets2 = response.data.datasets;
-        console.log(`### [getPrice] labels2's length: ${labels2.length}`);
+        // console.log(`### [getPrice] labels2's length: ${labels2.length}`);
 
         // Merge the data
         const newState = getStateWithMergedData(

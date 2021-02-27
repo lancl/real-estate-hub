@@ -3,6 +3,8 @@
  * (1) CSS in JS: some styles are required to be defined at the parent component,
  * <Map>; whereas the styles do not seem to work via 'className' (i.e. App.css)
  * (2) HoC (higher-order component): via the module 'compose'; per sample/ref codes
+ * (3) Map's API key: from .env file; note that use MAP_KEY_FAKE to avoid un-necessary
+ * charge (e.g. when testing other features)
  */
 
 import React from "react";
@@ -15,8 +17,7 @@ import {
   InfoWindow,
 } from "react-google-maps";
 
-// Note: use MAP_KEY_FAKE to avoid un-necessary charge (e.g. when testing other features)
-import { MAP_KEY, MAP_KEY_FAKE } from "../config.js";
+import { getDefaultZoom, getDefaultCenter } from "../helpers";
 
 /**
  * The default parameters
@@ -24,53 +25,12 @@ import { MAP_KEY, MAP_KEY_FAKE } from "../config.js";
  * mapParams.js); due to variable value as a HTML element
  */
 
-const ZOOMS = {
-  default: 3.5,
-  big: 8,
-};
-const MARKERS = [
-  { lat: 39.83, lng: -98.58, city: "Center of US" },
-  { lat: 45.51, lng: -122.68, city: "Portland, OR" }, // Portland
-];
-
+const MAP_KEY = process.env.REACT_APP_MAP_KEY;
 const MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
 const LOADING_ELEMENT = <div style={{ height: `90%` }} />;
 const MAP_ELEMENT = <div style={{ height: `90%` }} />;
 const CONTAINER_ELEMENT = <div style={{ height: `35vh` }} />; // For <GoogleMap/> container
-
-/**
- * Helper functions
- */
-
-// About: dynamicaly set up zoom parameter
-const getDefaultZoom = (markers) => {
-  // Exception(s) checkk
-  if (!markers.length) return ZOOMS.default;
-
-  if (markers.length === 1) {
-    return ZOOMS.big;
-  }
-
-  const [marker1, marker2] = markers;
-  // If the 2 markers are closer by, set bigger zoom
-  if (
-    marker1.lat &&
-    marker2.lat &&
-    Math.abs(marker1.lat - marker2.lat) < 30 &&
-    Math.abs(marker1.lng - marker2.lng) < 30
-  ) {
-    return ZOOMS.big;
-  }
-
-  // Else: set smaller zoom
-  return ZOOMS.default;
-};
-
-const getDefaultCenter = (markers) => {
-  if (!markers.length) return MARKERS[0];
-  return markers[0];
-};
 
 /**
  * Components: parent and child
@@ -111,6 +71,7 @@ class Map extends React.Component {
     return (
       <MapWithMarker
         googleMapURL={MAP_URL}
+        //
         loadingElement={LOADING_ELEMENT}
         mapElement={MAP_ELEMENT}
         containerElement={CONTAINER_ELEMENT}

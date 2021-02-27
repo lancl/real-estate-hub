@@ -16,14 +16,20 @@ I decided Not to update my repo from 2018 (via webpack). Instead, I started a ne
 
 Based on this npm package, [react-autosuggest](https://www.npmjs.com/package/react-autosuggest). The advantages of providing auto-suggestion feature include less effort to type the full name of each city.
 
-### Google Maps
+### Map Component: via react-google-maps Module
 
-Note that this API service is no longer free (it was back in 2018).
+This component/module is difficult to configure.
 
-I found one of Google Maps' API (`https://maps.googleapis.com/maps/api/js`) difficult to use (e.g. takes lots of configurations). Below are some issues that I ran into. The details are in Map.js file. But on the bright side, these issues are relatively minor.
+First, `<GoogleMap>` component needs API key in the endpoint (`https://maps.googleapis.com/maps/api/js`), in order to display the map properly.
 
-- Markers cannot be re-rendered without refreshing the page (AKA `GoogleMap` from `react-google-maps` module simply does not remove any marker, once added). First, I converted this component from a function to a class (with `componentDidUpdate()`), but it did not work. Then, I looked into [its API doc](https://developers.google.com/maps/documentation/javascript/examples/marker-remove), but found its logic to be not helpful for React (more for Vanilla JS).
-- Cannot dynamically set `defaultZoom` for `<GoogleMap>`. I wrote a helper function, getDefaultZoom(), that zooms in if the 2 geo-markers are close by. But it did not work (the map component simply does not update, once mounted). Therefore, I just set the default zoom as showing entire country of the US.
+Below are some issues that I ran into. The details are in Map.js file. But on the bright side, these issues are relatively minor.
+
+- Markers cannot be re-rendered without refreshing the page (AKA `GoogleMap` from `react-google-maps` module simply does not remove any marker, once added).
+  - First, I converted this component from a function to a class (with `componentDidUpdate()`), but it did not work.
+  - Then, I looked into [its API doc](https://developers.google.com/maps/documentation/javascript/examples/marker-remove), but found its logic to be not helpful for React (more for Vanilla JS).
+- Cannot dynamically set `defaultZoom` for `<GoogleMap>`.
+  - I wrote a helper function, getDefaultZoom(), that zooms in if the 2 geo-markers are close by. But it did not work (the map component simply does not update, once mounted
+  - Therefore, I just set the default zoom as showing entire country of the US.
 
 ### Line Charts
 
@@ -42,6 +48,14 @@ Also, some adjustments were made in server/index.js. `app.use(express.static(pat
 ### 2(b). Database: MongoDB
 
 I made the decision to use MongoDB, because this NoSQL DB is quite native to Javascript (.js). On the flip side, MySQL DB (.sql, not .js) has too many security constraints (e.g. command line issue, when importing a CSV file)
+
+### 2(c). Service: Google Maps' Geocode API
+
+Endpoint: `https://maps.googleapis.com/maps/api/geocode/json`
+
+Note that this API service (together with the other one above) are no longer free (it was back in 2018).
+
+Once a user clicks on submit for a city, the server will process the GET request and send a service call to this endpoint of Google Maps'.
 
 ## 3. Data Source
 
@@ -63,8 +77,11 @@ The region-level data needs to be processed (e.g. re-shaped/cleaned), before loa
 
 - Install dependencies: `npm start`
 - Run the app: `npm start`; then open [http://localhost:3000](http://localhost:3000) to view it in the browser. Also, any lint errors will be shown in the console.
+- Credentials (e.g. API key): stored at 2 files below (consider consolidating to `.env` file only, in the future)
+  - (1) `config.js`: it is used for all files except client side's. Because there is security risk to expose this file under client's directory `src/`.
+  - (2) `.env`: this env variable is used, for the exception that `Map.jx` component (its `googleMapURL` requries API key in the string, in order to load the map)
 
-### 5. Screenshots
+## 5. Screenshots
 
 #### Auto-Suggestion
 
