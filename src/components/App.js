@@ -103,6 +103,7 @@ class App extends React.Component {
   };
 
   // About: update Map component per city names
+  // [TBD] Error checking for response.status, in 'try'
   updateMap = async (city1, city2) => {
     const marker1 = { city: city1 };
     const marker2 = { city: city2 };

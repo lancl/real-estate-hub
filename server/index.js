@@ -38,7 +38,7 @@ app.get("/marker/:cityName/", async (req, res) => {
     if (status !== 200) {
       console.error(`[Server] API call error, with status as ${status}`);
     } else {
-      console.log(`[Server] Sending marker data back to the client side`);
+      // console.log(`[Server] Sending marker data back to the client side`);
       res.send(data);
     }
   } catch (e) {

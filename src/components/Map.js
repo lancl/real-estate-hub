@@ -1,4 +1,10 @@
 /**
+ * About: map component of the app's, that uses react-google-maps module
+ *
+ * [TBD] Improve this component, with regard to README's description
+ * Module's doc: https://tomchentw.github.io/react-google-maps/
+ * How: consider switching this class back to a function
+ *
  * Key note(s):
  * (1) CSS in JS: some styles are required to be defined at the parent component,
  * <Map>; whereas the styles do not seem to work via 'className' (i.e. App.css)
